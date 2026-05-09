@@ -54,7 +54,7 @@ ssh-keygen -t ed25519 -C "你的邮箱@example.com"
 **② 把公钥告诉 GitHub**
 
 ```bash
-cat ~/.ssh/id_*.pub 2>/dev/null
+cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub 2>/dev/null
 # 复制输出 → https://github.com/settings/ssh/new → 粘贴保存
 ```
 
@@ -62,7 +62,7 @@ cat ~/.ssh/id_*.pub 2>/dev/null
 
 ```bash
 mkdir -p ~/.ssh
-cat >> ~/.ssh/config << 'EOF'
+grep -q "Host github.com" ~/.ssh/config 2>/dev/null || cat >> ~/.ssh/config << 'EOF'
 Host github.com
     Hostname ssh.github.com
     Port 443
