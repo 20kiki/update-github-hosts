@@ -38,29 +38,80 @@
 
 ## 常见问题
 
-### git push 仍然超时怎么办？
+### git push 超时 / 推送失败怎么办？
 
-hosts 只解决 DNS 解析（域名 → IP），不影响 git 数据传输链路。push 超时通常是 SSH 22 端口或 HTTPS 被干扰，推荐切到 GitHub 的 SSH 443 端口：
+本工具通过 hosts 优化的是 **DNS 解析**（域名 → IP），让你的浏览器能正常打开 GitHub 网页。但 `git push` 走的是独立的传输链路，即使 DNS 正常，SSH（22 端口）或 HTTPS 的流量仍可能被干扰。下面的方案把 Git 流量切到 GitHub 的 SSH 443 端口，能有效解决 push 超时。
 
-**1. 配置 `~/.ssh/config`：**
+---
 
+#### 第一步：检查是否有 SSH 密钥
+
+打开终端（Windows 用 Git Bash），运行：
+
+```bash
+ls ~/.ssh/id_*
 ```
-Host github.com
+
+- **有 `id_rsa` + `id_rsa.pub`**（或 `id_ed25519` + `id_ed25519.pub`）→ 跳到第二步
+- **没有** → 先生成：
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "你的邮箱@example.com"
+```
+
+一路回车即可（不需要设密码）。
+
+#### 第二步：把公钥添加到 GitHub
+
+```bash
+cat ~/.ssh/id_rsa.pub
+```
+
+复制输出的全部内容 → 打开 [GitHub SSH 设置页](https://github.com/settings/ssh/new) → Title 随便填 → Key 粘贴 → 点 **Add SSH Key**。
+
+#### 第三步：配置 SSH 走 443 端口
+
+```bash
+echo 'Host github.com
     Hostname ssh.github.com
     Port 443
-    User git
+    User git' >> ~/.ssh/config
 ```
 
-**2. 切换仓库远程地址为 SSH：**
+#### 第四步：把仓库远程地址从 HTTPS 换成 SSH
+
+先看一下当前的远程地址：
+
+```bash
+git remote -v
+```
+
+如果是 `https://github.com/...` 开头，换成 SSH：
 
 ```bash
 git remote set-url origin git@github.com:用户名/仓库名.git
 ```
 
-**3. 测试连接：**
+（把 `用户名/仓库名` 换成你自己的）
+
+#### 第五步：测试连接
 
 ```bash
 ssh -T git@github.com
 ```
 
-看到 `Hi 用户名!` 即成功。
+显示 `Hi 你的用户名! You've successfully authenticated...` 就成功了。现在再 `git push` 试试。
+
+---
+
+#### 补充：让 SSH Agent 持久化（免去每次输入密钥密码）
+
+如果没有给密钥设密码，跳过这一步。如果设了密码，避免每次 push 都输入：
+
+```bash
+# 启动 ssh-agent 并加载密钥
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+```
+
+可以把这两行加到 `~/.bashrc`（Linux / Git Bash）或 `~/.zshrc`（macOS）末尾，每次打开终端自动生效。
