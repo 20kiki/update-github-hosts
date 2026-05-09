@@ -38,80 +38,62 @@
 
 ## 常见问题
 
-### git push 超时 / 推送失败怎么办？
+### git push 超时？把流量切到 SSH 443 端口
 
-本工具通过 hosts 优化的是 **DNS 解析**（域名 → IP），让你的浏览器能正常打开 GitHub 网页。但 `git push` 走的是独立的传输链路，即使 DNS 正常，SSH（22 端口）或 HTTPS 的流量仍可能被干扰。下面的方案把 Git 流量切到 GitHub 的 SSH 443 端口，能有效解决 push 超时。
+本工具通过 hosts 优化 DNS 解析，解决的是网页访问问题。`git push` 走独立传输链路，需要把流量切到 GitHub 的备用 SSH 443 端口来绕过干扰。全程 5 步：
 
----
-
-#### 第一步：检查是否有 SSH 密钥
-
-打开终端（Windows 用 Git Bash），运行：
+**① 准备 SSH 密钥（已有可跳过）**
 
 ```bash
 ls ~/.ssh/id_*
+# 没有的话生成（推荐 ed25519）：
+ssh-keygen -t ed25519 -C "你的邮箱@example.com"
+# 一路回车
 ```
 
-- **有 `id_rsa` + `id_rsa.pub`**（或 `id_ed25519` + `id_ed25519.pub`）→ 跳到第二步
-- **没有** → 先生成：
+**② 把公钥告诉 GitHub**
 
 ```bash
-ssh-keygen -t rsa -b 4096 -C "你的邮箱@example.com"
+cat ~/.ssh/id_ed25519.pub
+# 复制输出 → GitHub Settings → SSH keys → New SSH Key → 粘贴保存
 ```
 
-一路回车即可（不需要设密码）。
+**③ 配置 SSH 走 443 端口**
 
-#### 第二步：把公钥添加到 GitHub
+用文本编辑器打开（或创建）`~/.ssh/config`，写入：
 
-```bash
-cat ~/.ssh/id_rsa.pub
 ```
-
-复制输出的全部内容 → 打开 [GitHub SSH 设置页](https://github.com/settings/ssh/new) → Title 随便填 → Key 粘贴 → 点 **Add SSH Key**。
-
-#### 第三步：配置 SSH 走 443 端口
-
-```bash
-echo 'Host github.com
+Host github.com
     Hostname ssh.github.com
     Port 443
-    User git' >> ~/.ssh/config
+    User git
 ```
 
-#### 第四步：把仓库远程地址从 HTTPS 换成 SSH
+然后修复权限：
 
-先看一下当前的远程地址：
+```bash
+chmod 600 ~/.ssh/config
+chmod 700 ~/.ssh
+```
+
+**④ 改仓库远程地址为 SSH**
 
 ```bash
 git remote -v
-```
-
-如果是 `https://github.com/...` 开头，换成 SSH：
-
-```bash
+# 看到 https:// 就换成下面格式（替换用户名/仓库名）：
 git remote set-url origin git@github.com:用户名/仓库名.git
 ```
 
-（把 `用户名/仓库名` 换成你自己的）
-
-#### 第五步：测试连接
+**⑤ 测试并 push**
 
 ```bash
 ssh -T git@github.com
+# 看到 "Hi 用户名!" 即成功（首次连接会问 yes/no，输入 yes）
+git push
 ```
 
-显示 `Hi 你的用户名! You've successfully authenticated...` 就成功了。现在再 `git push` 试试。
-
----
-
-#### 补充：让 SSH Agent 持久化（免去每次输入密钥密码）
-
-如果没有给密钥设密码，跳过这一步。如果设了密码，避免每次 push 都输入：
-
-```bash
-# 启动 ssh-agent 并加载密钥
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_rsa
-```
-
-可以把这两行加到 `~/.bashrc`（Linux / Git Bash）或 `~/.zshrc`（macOS）末尾，每次打开终端自动生效。
+> 密钥设了密码？每次开机可执行 `ssh-add` 避免重复输入：
+> ```bash
+> eval "$(ssh-agent -s)"
+> ssh-add ~/.ssh/id_ed25519
+> ```
