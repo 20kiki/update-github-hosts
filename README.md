@@ -54,7 +54,7 @@ ssh-keygen -t ed25519 -C "你的邮箱@example.com"
 **② 把公钥告诉 GitHub**
 
 ```bash
-cat ~/.ssh/id_ed25519.pub
+cat ~/.ssh/id_*.pub 2>/dev/null
 # 复制输出 → https://github.com/settings/ssh/new → 粘贴保存
 ```
 
@@ -91,5 +91,5 @@ git push
 > 密钥设了密码？每次开机可执行 `ssh-add` 避免重复输入：
 > ```bash
 > eval "$(ssh-agent -s)"
-> ssh-add ~/.ssh/id_ed25519
+> ssh-add ~/.ssh/id_*
 > ```
