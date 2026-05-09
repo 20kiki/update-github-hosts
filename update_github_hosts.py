@@ -2,13 +2,20 @@
 """Fetch GitHub520 hosts and update the system hosts file."""
 
 import os
+import platform
+import shutil
 import sys
 import tempfile
 import urllib.request
 
 # GitHub520 hosts source
 HOSTS_URL = "https://raw.hellogithub.com/hosts"
-HOSTS_PATH = r"C:\Windows\System32\drivers\etc\hosts"
+
+_SYSTEM = platform.system()
+if _SYSTEM == "Windows":
+    HOSTS_PATH = r"C:\Windows\System32\drivers\etc\hosts"
+else:
+    HOSTS_PATH = "/etc/hosts"
 
 START_MARKER = "# GitHub520 Host Start"
 END_MARKER = "# GitHub520 Host End"
@@ -50,11 +57,15 @@ def update_hosts_file(hosts_content: str):
         tmp_path = tmp.name
 
     try:
-        os.replace(tmp_path, HOSTS_PATH)
-        print(f"[OK] 已写入 {hosts_content.count(chr(10)) + 1} 条映射到 {HOSTS_PATH}")
+        try:
+            os.replace(tmp_path, HOSTS_PATH)
+        except OSError:
+            shutil.move(tmp_path, HOSTS_PATH)
     except PermissionError:
-        print("[ERROR] 权限不足，请右键以管理员身份运行。")
+        print("[ERROR] 权限不足，请使用 root / 管理员身份运行。")
         sys.exit(1)
+
+    print(f"[OK] 已写入 {hosts_content.count(chr(10)) + 1} 条映射到 {HOSTS_PATH}")
 
 
 def main():
@@ -72,8 +83,20 @@ def main():
 def flush_dns():
     """Flush system DNS cache so new hosts entries take effect immediately."""
     import subprocess
+
+    commands = {
+        "Windows": ["ipconfig", "/flushdns"],
+        "Darwin": ["dscacheutil", "-flushcache"],
+        "Linux": ["resolvectl", "flush-caches"],
+    }
+
+    cmd = commands.get(_SYSTEM)
+    if cmd is None:
+        print("[WARN] 未知系统，跳过 DNS 缓存刷新")
+        return
+
     try:
-        subprocess.run(["ipconfig", "/flushdns"], capture_output=True, check=True)
+        subprocess.run(cmd, capture_output=True, check=True)
         print("[OK] DNS 缓存已刷新")
     except Exception:
         print("[WARN] 无法刷新 DNS 缓存，重启浏览器后生效")
