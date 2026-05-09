@@ -55,23 +55,19 @@ ssh-keygen -t ed25519 -C "你的邮箱@example.com"
 
 ```bash
 cat ~/.ssh/id_ed25519.pub
-# 复制输出 → GitHub Settings → SSH keys → New SSH Key → 粘贴保存
+# 复制输出 → https://github.com/settings/ssh/new → 粘贴保存
 ```
 
 **③ 配置 SSH 走 443 端口**
 
-用文本编辑器打开（或创建）`~/.ssh/config`，写入：
-
-```
+```bash
+mkdir -p ~/.ssh
+cat >> ~/.ssh/config << 'EOF'
 Host github.com
     Hostname ssh.github.com
     Port 443
     User git
-```
-
-然后修复权限：
-
-```bash
+EOF
 chmod 600 ~/.ssh/config
 chmod 700 ~/.ssh
 ```
