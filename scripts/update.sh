@@ -23,4 +23,4 @@ if [ -z "$PYTHON" ]; then
     exit 1
 fi
 
-"$PYTHON" "$SCRIPT_DIR/update_github_hosts.py"
+"$PYTHON" "$SCRIPT_DIR/../update_github_hosts.py"

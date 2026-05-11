@@ -1,4 +1,15 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -9,5 +9,5 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
-python "%~dp0update_github_hosts.py"
+python "%~dp0..\update_github_hosts.py"
 pause

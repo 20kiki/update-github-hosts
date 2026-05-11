@@ -1,70 +1,99 @@
-# GitHub520 Hosts 一键更新工具
+<div align="center">
+  <h1>GitHub Hosts Updater</h1>
+  <p>One-click update system hosts file for smooth GitHub access — fetches optimal IPs from GitHub520.</p>
 
-自动拉取 [GitHub520](https://github.com/521xueweihan/GitHub520) 最新 hosts 列表并写入系统 hosts 文件，解决 GitHub 网页访问慢、图片加载失败等问题。
+  [![GitHub stars](https://img.shields.io/github/stars/20kiki/update-github-hosts?style=social)](https://github.com/20kiki/update-github-hosts/stargazers)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+  [![Python: 3.x](https://img.shields.io/badge/Python-3.x-green)](https://python.org)
+  [![Platform: Windows|macOS|Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
+</div>
 
-> 如果遇到 `git push` 超时，hosts 只能优化 DNS 解析，传输链路的干扰需要走 **SSH 443 端口**，见下方[常见问题](#常见问题)。
+**Language:** [English](README.md) | [简体中文](zh-CN/README.md)
 
-## 使用方法
+---
 
-### Windows
+## 📋 Table of Contents
+- [The Problem](#the-problem)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Usage](#usage)
+- [How It Works](#how-it-works)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
-1. 下载本项目
-2. 双击 `一键更新.bat`（自动请求管理员权限）
-3. 完成
+---
 
-### macOS / Linux
+The GitHub520 project maintains a list of optimal GitHub IPs, but manually updating your hosts file is tedious. This tool automates it — fetch, write, flush DNS — in one command.
 
-1. 下载本项目
-2. 终端中运行 `./一键更新.sh`（自动请求 root 权限）
-3. 完成
+## ✨ The Problem
 
-每次更新后会自动刷新 DNS 缓存，立即生效。
+Slow GitHub page loads, broken image rendering, and connection timeouts are common in some regions due to DNS resolution issues. This tool solves the **web access** problem by updating your local hosts file with the fastest known GitHub IPs.
 
-## 原理
+> If your issue is `git push` timing out, see [Troubleshooting](#troubleshooting) — hosts alone won't fix the transfer layer.
 
-- 从 `raw.hellogithub.com` 拉取 GitHub520 维护的最优 IP 列表
-- 写入系统 hosts 文件，通过注释标记管理
-- 执行对应平台的 DNS 缓存刷新命令
+## 🚀 Quick Start
 
-## 定时自动更新
+**Windows:** Double-click `scripts/update.bat` (auto-requests admin)
 
-- **Windows**：在任务计划程序中创建定时任务，每日运行 `一键更新.bat`
-- **macOS**：使用 `launchd` 创建定时任务
-- **Linux**：使用 `cron` 或 `systemd timer` 创建定时任务
+**macOS / Linux:** Run `./scripts/update.sh` (auto-requests root)
 
-## 依赖
+That's it. DNS cache flushes automatically, changes take effect immediately.
 
-需要 Python 3 环境（`python3` 或 `python` 命令可在终端中使用）。
+## 📦 Installation
 
-## 常见问题
+```bash
+git clone https://github.com/20kiki/update-github-hosts.git
+cd update-github-hosts
+```
 
-### git push 超时？把流量切到 SSH 443 端口
+Requires Python 3 (`python` or `python3` available in terminal).
 
-本工具通过 hosts 优化 DNS 解析，解决的是网页访问问题。`git push` 走独立传输链路，需要把流量切到 GitHub 的备用 SSH 443 端口来绕过干扰。全程 5 步：
+## 📖 Usage
 
-> **操作环境**
-> - **Windows**：请用 **Git Bash**（安装 Git 时自带），不要用 CMD 或 PowerShell
-> - **macOS**：聚焦搜索"终端"或从"启动台 → 其他 → 终端"打开
-> - **Linux**：直接打开你的终端模拟器
+### One-Time Update
 
-**① 准备 SSH 密钥（已有可跳过）**
+```bash
+# Windows — double-click
+scripts/update.bat
 
+# macOS / Linux
+./scripts/update.sh
+```
+
+### Scheduled Auto-Update
+
+- **Windows:** Create a daily task in Task Scheduler running `scripts/update.bat`
+- **macOS:** Use `launchd` for periodic execution
+- **Linux:** Add a `cron` job or `systemd timer`
+
+## 🔧 How It Works
+
+1. Fetches the latest hosts list from `raw.hellogithub.com`
+2. Extracts IP-to-domain mappings for GitHub services
+3. Writes them into your system hosts file (marked with comment tags)
+4. Flushes the system DNS cache so changes take effect immediately
+
+## 🔨 Troubleshooting
+
+### `git push` times out? Route traffic through SSH port 443
+
+Hosts optimization fixes DNS resolution (web browsing). `git push` uses a separate transfer layer — you need SSH over port 443 to bypass interference:
+
+**① Prepare SSH key (skip if you have one)**
 ```bash
 ls ~/.ssh/id_*
-# 没有的话生成（推荐 ed25519）：
-ssh-keygen -t ed25519 -C "你的邮箱@example.com"
-# 一路回车
+# If none found:
+ssh-keygen -t ed25519 -C "your-email@example.com"
 ```
 
-**② 把公钥告诉 GitHub**
-
+**② Add public key to GitHub**
 ```bash
 cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub 2>/dev/null
-# 复制输出 → https://github.com/settings/ssh/new → 粘贴保存
+# Copy output → https://github.com/settings/ssh/new → Save
 ```
 
-**③ 配置 SSH 走 443 端口**
-
+**③ Configure SSH to use port 443**
 ```bash
 mkdir -p ~/.ssh
 grep -q "Host github.com" ~/.ssh/config 2>/dev/null || cat >> ~/.ssh/config << 'EOF'
@@ -77,24 +106,23 @@ chmod 600 ~/.ssh/config
 chmod 700 ~/.ssh
 ```
 
-**④ 改仓库远程地址为 SSH**
-
+**④ Switch remote to SSH**
 ```bash
 git remote -v
-# 看到 https:// 就换成下面格式（替换用户名/仓库名）：
-git remote set-url origin git@github.com:用户名/仓库名.git
+git remote set-url origin git@github.com:username/repo.git
 ```
 
-**⑤ 测试并 push**
-
+**⑤ Test and push**
 ```bash
 ssh -T git@github.com
-# 看到 "Hi 用户名!" 即成功（首次连接会问 yes/no，输入 yes）
+# Should see: "Hi username!"
 git push
 ```
 
-> 密钥设了密码？每次开机可执行 `ssh-add` 避免重复输入：
-> ```bash
-> eval "$(ssh-agent -s)"
-> ssh-add ~/.ssh/id_*
-> ```
+## 🤝 Contributing
+
+Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+MIT
