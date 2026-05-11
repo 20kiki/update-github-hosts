@@ -36,7 +36,7 @@ Slow GitHub page loads, broken image rendering, and connection timeouts are comm
 
 **Windows:** Double-click `scripts/update.bat` (auto-requests admin)
 
-**macOS / Linux:** Run `./scripts/update.sh` (auto-requests root)
+**macOS / Linux:** Run `bash scripts/update.sh` (auto-requests root)
 
 That's it. DNS cache flushes automatically, changes take effect immediately.
 
@@ -58,7 +58,7 @@ Requires Python 3 (`python` or `python3` available in terminal).
 scripts/update.bat
 
 # macOS / Linux
-./scripts/update.sh
+bash scripts/update.sh
 ```
 
 ### Scheduled Auto-Update

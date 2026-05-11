@@ -36,7 +36,7 @@ GitHub 网页加载慢、图片裂开、连接超时，在某些地区是家常�
 
 **Windows：** 双击 `scripts/update.bat`（自动提权）
 
-**macOS / Linux：** 终端运行 `./scripts/update.sh`（自动提权）
+**macOS / Linux：** 终端运行 `bash scripts/update.sh`（自动提权）
 
 DNS 缓存自动刷新，修改立即生效。
 
@@ -58,7 +58,7 @@ cd update-github-hosts
 scripts/update.bat
 
 # macOS / Linux
-./scripts/update.sh
+bash scripts/update.sh
 ```
 
 ### 定时自动更新
