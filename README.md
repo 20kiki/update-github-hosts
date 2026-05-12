@@ -19,6 +19,7 @@
 - [Usage](#-usage)
 - [How It Works](#-how-it-works)
 - [Troubleshooting](#-troubleshooting)
+- [Topics](#topics)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -118,6 +119,10 @@ ssh -T git@github.com
 # Should see: "Hi username!"
 git push
 ```
+
+## Topics
+
+[`github`](https://github.com/topics/github) [`hosts`](https://github.com/topics/hosts) [`dns`](https://github.com/topics/dns) [`python`](https://github.com/topics/python) [`windows`](https://github.com/topics/windows) [`macos`](https://github.com/topics/macos) [`linux`](https://github.com/topics/linux)
 
 ## 🤝 Contributing
 

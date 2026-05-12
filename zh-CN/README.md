@@ -19,6 +19,7 @@
 - [使用方法](#-使用方法)
 - [工作原理](#-工作原理)
 - [常见问题](#-常见问题)
+- [标签](#标签)
 - [贡献指南](#-贡献指南)
 - [许可证](#-许可证)
 
@@ -122,6 +123,10 @@ ssh -T git@github.com
 # 看到 "Hi 用户名!" 即成功
 git push
 ```
+
+## 标签
+
+[`github`](https://github.com/topics/github) [`hosts`](https://github.com/topics/hosts) [`dns`](https://github.com/topics/dns) [`python`](https://github.com/topics/python) [`windows`](https://github.com/topics/windows) [`macos`](https://github.com/topics/macos) [`linux`](https://github.com/topics/linux)
 
 ## 🤝 贡献指南
 
