@@ -2,10 +2,10 @@
   <h1>GitHub Hosts Updater</h1>
   <p>One-click update system hosts file for smooth GitHub access — fetches optimal IPs from GitHub520.</p>
 
-  [![GitHub stars](https://img.shields.io/github/stars/20kiki/update-github-hosts?style=social)](https://github.com/20kiki/update-github-hosts/stargazers)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-  [![Python: 3.x](https://img.shields.io/badge/Python-3.x-green)](https://python.org)
-  [![Platform: Windows|macOS|Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+  [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
+  [![Stars](https://img.shields.io/github/stars/20kiki/update-github-hosts)](https://github.com/20kiki/update-github-hosts)
+  [![Python](https://img.shields.io/badge/Python-3.x-3776AB)](https://python.org)
 </div>
 
 **Language:** [English](README.md) | [简体中文](zh-CN/README.md)
