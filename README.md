@@ -128,6 +128,10 @@ git push
 
 Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
+## 👤 Author
+
+[@20kiki](https://github.com/20kiki)
+
 ## 📄 License
 
 MIT
