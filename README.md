@@ -6,9 +6,9 @@
   [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
   [![Stars](https://img.shields.io/github/stars/20kiki/update-github-hosts)](https://github.com/20kiki/update-github-hosts)
   [![Python](https://img.shields.io/badge/Python-3.x-3776AB)](https://python.org)
-</div>
 
-**Language:** [English](README.md) | [简体中文](zh-CN/README.md)
+  <p><strong>Language:</strong> <a href="README.md">English</a> | <a href="zh-CN/README.md">简体中文</a></p>
+</div>
 
 ---
 
