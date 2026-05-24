@@ -1,100 +1,102 @@
 <div align="center">
-  <h1>GitHub Hosts Updater</h1>
-  <p>One-click update system hosts file for smooth GitHub access — fetches optimal IPs from GitHub520.</p>
+  <h1>GitHub Hosts 更新工具</h1>
+  <p>一键更新系统 hosts 文件，畅快访问 GitHub — 自动拉取 GitHub520 最优 IP。</p>
 
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-  [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
-  [![Stars](https://img.shields.io/github/stars/20kiki/update-github-hosts)](https://github.com/20kiki/update-github-hosts)
-  [![Python](https://img.shields.io/badge/Python-3.x-3776AB)](https://python.org)
+  [![GitHub stars](https://img.shields.io/github/stars/20kiki/update-github-hosts?style=social)](https://github.com/20kiki/update-github-hosts/stargazers)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+  [![Python: 3.x](https://img.shields.io/badge/Python-3.x-green)](https://python.org)
+  [![Platform: Windows|macOS|Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
 
-  <p><strong>Language:</strong> <a href="README.md">English</a> | <a href="zh-CN/README.md">简体中文</a></p>
 </div>
 
 ---
 
-## 📋 Table of Contents
-- [The Problem](#-the-problem)
-- [Quick Start](#-quick-start)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [How It Works](#-how-it-works)
-- [Troubleshooting](#-troubleshooting)
-- [Topics](#topics)
-- [Contributing](#-contributing)
-- [License](#-license)
+## 📋 目录
+- [它能解决什么](#-它能解决什么)
+- [快速开始](#-快速开始)
+- [安装](#-安装)
+- [使用方法](#-使用方法)
+- [工作原理](#-工作原理)
+- [常见问题](#-常见问题)
+- [标签](#标签)
+- [贡献指南](#-贡献指南)
+- [许可证](#-许可证)
 
 ---
 
-The GitHub520 project maintains a list of optimal GitHub IPs, but manually updating your hosts file is tedious. This tool automates it — fetch, write, flush DNS — in one command.
+GitHub520 项目维护着 GitHub 最优 IP 列表，但手动更新 hosts 文件很麻烦。本工具把它自动化了——拉取、写入、刷新 DNS 缓存，一条命令搞定。
 
-## ✨ The Problem
+## ✨ 它能解决什么
 
-Slow GitHub page loads, broken image rendering, and connection timeouts are common in some regions due to DNS resolution issues. This tool solves the **web access** problem by updating your local hosts file with the fastest known GitHub IPs.
+GitHub 网页加载慢、图片裂开、连接超时，在某些地区是家常便饭。根本原因是 DNS 解析走了不稳定的线路。本工具通过向系统 hosts 写入已知最快的 GitHub IP，解决**网页访问**问题。
 
-> If your issue is `git push` timing out, see [Troubleshooting](#troubleshooting) — hosts alone won't fix the transfer layer.
+> 如果你的问题是 `git push` 超时，hosts 只能优化 DNS 解析，传输链路需要走 SSH 443 端口，见[常见问题](#常见问题)。
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
-**Windows:** Double-click `scripts/update.bat` (auto-requests admin)
+**Windows：** 双击 `scripts/update.bat`（自动提权）
 
-**macOS / Linux:** Run `bash scripts/update.sh` (auto-requests root)
+**macOS / Linux：** 终端运行 `bash scripts/update.sh`（自动提权）
 
-That's it. DNS cache flushes automatically, changes take effect immediately.
+DNS 缓存自动刷新，修改立即生效。
 
-## 📦 Installation
+## 📦 安装
 
 ```bash
 git clone https://github.com/20kiki/update-github-hosts.git
 cd update-github-hosts
 ```
 
-Requires Python 3 (`python` or `python3` available in terminal).
+需要 Python 3 环境（终端中能执行 `python` 或 `python3`）。
 
-## 📖 Usage
+## 📖 使用方法
 
-### One-Time Update
+### 一次性更新
 
 ```bash
-# Windows — double-click
+# Windows — 双击
 scripts/update.bat
 
 # macOS / Linux
 bash scripts/update.sh
 ```
 
-### Scheduled Auto-Update
+### 定时自动更新
 
-- **Windows:** Create a daily task in Task Scheduler running `scripts/update.bat`
-- **macOS:** Use `launchd` for periodic execution
-- **Linux:** Add a `cron` job or `systemd timer`
+- **Windows：** 在任务计划程序中创建每日任务，运行 `scripts/update.bat`
+- **macOS：** 使用 `launchd` 设置定时执行
+- **Linux：** 添加 `cron` 任务或 `systemd timer`
 
-## 🔧 How It Works
+## 🔧 工作原理
 
-1. Fetches the latest hosts list from `raw.hellogithub.com`
-2. Extracts IP-to-domain mappings for GitHub services
-3. Writes them into your system hosts file (marked with comment tags)
-4. Flushes the system DNS cache so changes take effect immediately
+1. 从 `raw.hellogithub.com` 拉取最新 hosts 列表
+2. 提取 GitHub 服务相关的 IP 到域名映射
+3. 写入系统 hosts 文件（通过注释标记管理）
+4. 刷新系统 DNS 缓存，使修改立即生效
 
-## 🔨 Troubleshooting
+## 🔨 常见问题
 
-### `git push` times out? Route traffic through SSH port 443
+### `git push` 超时？把流量切到 SSH 443 端口
 
-Hosts optimization fixes DNS resolution (web browsing). `git push` uses a separate transfer layer — you need SSH over port 443 to bypass interference:
+hosts 优化解决的是 DNS 解析（网页访问）问题。`git push` 走的是独立传输链路，需要把流量切到 GitHub 的备用 SSH 443 端口来绕过干扰：
 
-**① Prepare SSH key (skip if you have one)**
+> 以下操作 Windows 用户请用 **Git Bash**（安装 Git 时自带），不要用 CMD 或 PowerShell。
+
+**① 准备 SSH 密钥（已有可跳过）**
 ```bash
 ls ~/.ssh/id_*
-# If none found:
+# 没有的话生成：
 ssh-keygen -t ed25519 -C "your-email@example.com"
+# 一路回车
 ```
 
-**② Add public key to GitHub**
+**② 把公钥告诉 GitHub**
 ```bash
 cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub 2>/dev/null
-# Copy output → https://github.com/settings/ssh/new → Save
+# 复制输出 → https://github.com/settings/ssh/new → 粘贴保存
 ```
 
-**③ Configure SSH to use port 443**
+**③ 配置 SSH 走 443 端口**
 ```bash
 mkdir -p ~/.ssh
 grep -q "Host github.com" ~/.ssh/config 2>/dev/null || cat >> ~/.ssh/config << 'EOF'
@@ -107,31 +109,28 @@ chmod 600 ~/.ssh/config
 chmod 700 ~/.ssh
 ```
 
-**④ Switch remote to SSH**
+**④ 改仓库远程地址为 SSH**
 ```bash
 git remote -v
-git remote set-url origin git@github.com:username/repo.git
+# 看到 https:// 就换成下面格式：
+git remote set-url origin git@github.com:用户名/仓库名.git
 ```
 
-**⑤ Test and push**
+**⑤ 测试并 push**
 ```bash
 ssh -T git@github.com
-# Should see: "Hi username!"
+# 看到 "Hi 用户名!" 即成功
 git push
 ```
 
-## Topics
+## 标签
 
 [`github`](https://github.com/topics/github) [`hosts`](https://github.com/topics/hosts) [`dns`](https://github.com/topics/dns) [`python`](https://github.com/topics/python) [`windows`](https://github.com/topics/windows) [`macos`](https://github.com/topics/macos) [`linux`](https://github.com/topics/linux)
 
-## 🤝 Contributing
+## 🤝 贡献指南
 
-Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+欢迎贡献。详见 [CONTRIBUTING.md](../CONTRIBUTING.md)。
 
-## 👤 Author
-
-[@20kiki](https://github.com/20kiki)
-
-## 📄 License
+## 📄 许可证
 
 MIT
