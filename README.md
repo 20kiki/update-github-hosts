@@ -2,7 +2,7 @@
   <h1>GitHub Hosts 更新工具</h1>
   <p>一键更新系统 hosts 文件，畅快访问 GitHub — 自动拉取 GitHub520 最优 IP。</p>
 
-  [![GitHub stars](https://img.shields.io/github/stars/20kiki/update-github-hosts?style=social)](https://github.com/20kiki/update-github-hosts/stargazers)
+  [![GitHub stars](https://img.shields.io/github/stars/hawkongz/update-github-hosts?style=social)](https://github.com/hawkongz/update-github-hosts/stargazers)
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
   [![Python: 3.x](https://img.shields.io/badge/Python-3.x-green)](https://python.org)
   [![Platform: Windows|macOS|Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
@@ -43,7 +43,7 @@ DNS 缓存自动刷新，修改立即生效。
 ## 📦 安装
 
 ```bash
-git clone https://github.com/20kiki/update-github-hosts.git
+git clone https://github.com/hawkongz/update-github-hosts.git
 cd update-github-hosts
 ```
 

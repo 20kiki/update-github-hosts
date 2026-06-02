@@ -5,10 +5,10 @@ Thanks for your interest in improving this tool.
 ## How to Contribute
 
 ### Report Bugs
-Open an issue using the [Bug Report](https://github.com/20kiki/update-github-hosts/issues/new?template=bug_report.md) template. Include your OS, Python version, and the error output.
+Open an issue using the [Bug Report](https://github.com/hawkongz/update-github-hosts/issues/new?template=bug_report.md) template. Include your OS, Python version, and the error output.
 
 ### Suggest Features
-Open an issue using the [Feature Request](https://github.com/20kiki/update-github-hosts/issues/new?template=feature_request.md) template.
+Open an issue using the [Feature Request](https://github.com/hawkongz/update-github-hosts/issues/new?template=feature_request.md) template.
 
 ### Submit Changes
 1. Fork the repo
